@@ -4,7 +4,7 @@ A badge is a visual indicator for numeric values such as tallies and scores.
 ## Specifications
 The badge specifications on Zeroheight is [here](https://spark.adevinta.com/1186e1705/p/8711ec-badge).
 
-![Figma anatomy](https://github.com/adevinta/spark-ios-component-badge/blob/main/assets/anatomy.png)
+![Figma anatomy](https://github.com/adevinta/spark-ios-component-badge/blob/main/.github/assets/anatomy.png)
 
 ## Usage
 Badge is available both in UIKit and SwiftUI. There are `BadgeUIView` and `BadgeView`. 
