@@ -10,6 +10,7 @@ configurations:
     output: Sources/SparkBadgeTesting/Generated/AutoMockable.generated.swift
     args:
       autoMockableImports: [Combine, SparkTheming]
+      autoMockableSPIImports: [SparkCommon, SparkCommonTesting, SparkThemingTesting]
       autoMockableTestableImports: [SparkBadge]
   - sources:
       include:
@@ -22,6 +23,7 @@ configurations:
     output: Sources/SparkBadgeTesting/Generated/AutoMockTest.generated.swift
     args:
       autoMockableImports: [Combine, SparkTheming]
+      autoMockableSPIImports: [SparkCommon, SparkCommonTesting, SparkThemingTesting]
       autoMockableTestableImports: [SparkBadge]
   - sources:
       include:
@@ -34,6 +36,7 @@ configurations:
     output: Sources/SparkBadgeTesting/Generated/AutoPublisherTest.generated.swift
     args:
       autoMockableImports: [Combine, SparkTheming]
+      autoMockableSPIImports: [SparkCommon, SparkCommonTesting, SparkThemingTesting]
       autoMockableTestableImports: [SparkBadge]
   - sources:
       include:
@@ -46,4 +49,5 @@ configurations:
     output: Sources/SparkBadgeTesting/Generated/AutoViewModelStub.generated.swift
     args:
       autoMockableImports: [Combine, SparkTheming]
+      autoMockableSPIImports: [SparkCommon, SparkCommonTesting, SparkThemingTesting]
       autoMockableTestableImports: [SparkBadge]
