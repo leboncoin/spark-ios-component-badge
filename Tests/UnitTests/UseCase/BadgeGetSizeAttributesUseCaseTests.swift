@@ -7,7 +7,7 @@
 //
 
 @testable import SparkBadge
-import SparkThemingTesting
+@_spi(SI_SPI) import SparkThemingTesting
 @_spi(SI_SPI) import SparkCommon
 import XCTest
 

@@ -9,7 +9,7 @@
 import XCTest
 import SwiftUI
 @testable import SparkBadge
-import SparkThemingTesting
+@_spi(SI_SPI) import SparkThemingTesting
 import SparkTheming
 
 final class BadgeGetColorsUseCaseTests: XCTestCase {
