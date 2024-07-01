@@ -1,0 +1,10 @@
+name: build-demo-app-report
+
+on:
+  workflow_run:
+    workflows: [build-demo-app]
+    types: [completed]
+
+jobs:
+  build-demo-app-report:
+    uses: adevinta/spark-ios-common/.github/workflows/buildDemoAppReport.yml@main
