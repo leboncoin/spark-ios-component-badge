@@ -1,0 +1,9 @@
+name: build-app-for-testing-session
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  build-app-for-testing-session:
+    uses: adevinta/spark-ios-common/.github/workflows/buildDemoApp.yml@main
