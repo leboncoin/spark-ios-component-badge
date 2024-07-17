@@ -2,7 +2,7 @@
 //  BadgeAccessibilityIdentifier.swift
 //  Spark
 //
-//  Created by alex.vecherov on 05.05.23.
+//  Created by alex.vecherov on 06.05.23.
 //  Copyright © 2023 Adevinta. All rights reserved.
 //
 
