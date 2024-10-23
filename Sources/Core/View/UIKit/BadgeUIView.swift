@@ -180,7 +180,7 @@ public class BadgeUIView: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = self.viewModel.backgroundColor.uiColor
         self.layer.borderWidth = self.borderWidth
-        self.layer.borderColor = self.viewModel.border.color.uiColor.cgColor
+        self.setBorderColor(from: self.viewModel.border.color)
         self.clipsToBounds = true
     }
 
@@ -346,7 +346,7 @@ extension BadgeUIView {
 // MARK: - Updates on Trait Collection Change
 extension BadgeUIView {
     private func updateBorder(_ badgeBorder: BadgeBorder, isBorderVisible: Bool) {
-        self.layer.borderColor = badgeBorder.color.uiColor.cgColor
+        self.setBorderColor(from: badgeBorder.color)
         self.setupScalables(isBorderVisible: isBorderVisible)
         self.reloadBorderWidth()
     }
@@ -354,7 +354,7 @@ extension BadgeUIView {
     private func reloadColors() {
         self.backgroundColor = self.viewModel.backgroundColor.uiColor
         self.textLabel.textColor = self.viewModel.textColor.uiColor
-        self.layer.borderColor = self.viewModel.border.color.uiColor.cgColor
+        self.setBorderColor(from: self.viewModel.border.color)
     }
 
     private func reloadBadgeFontIfNeeded() {
