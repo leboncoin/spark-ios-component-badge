@@ -3,7 +3,7 @@
 //  SparkBadge
 //
 //  Created by louis.borlee on 16/06/2023.
-//  Copyright © 2023 Adevinta. All rights reserved.
+//  Copyright © 2023 Leboncoin. All rights reserved.
 //
 
 import Foundation
