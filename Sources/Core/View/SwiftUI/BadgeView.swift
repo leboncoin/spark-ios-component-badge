@@ -1,6 +1,6 @@
 //
 //  BadgeView.swift
-//  SparkBadge
+//  SparkComponentBadge
 //
 //  Created by alex.vecherov on 10.05.23.
 //  Copyright © 2023 Leboncoin. All rights reserved.
@@ -62,7 +62,7 @@ public struct BadgeView: View {
     /// - Parameter theme: ``Theme``
     /// - Parameter intent: ``BadgeIntentType``
     /// - Parameter value: **Int?** You can set value to nil, to make ``BadgeView`` without text
-    public init(theme: Theme, intent: BadgeIntentType, value: Int? = nil) {
+    public init(theme: any Theme, intent: BadgeIntentType, value: Int? = nil) {
         let viewModel = BadgeViewModel(theme: theme, intent: intent, value: value)
         self.viewModel = viewModel
 
@@ -109,7 +109,7 @@ public struct BadgeView: View {
     /// Controlls spark theme of the Badge. See more details in ``Theme``.
     ///
     /// Use @State variable to control ``Theme`` based on this variable.
-    public func theme(_ theme: Theme) -> Self {
+    public func theme(_ theme: any Theme) -> Self {
         self.viewModel.theme = theme
         return self
     }

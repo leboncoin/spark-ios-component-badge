@@ -5,18 +5,18 @@ import PackageDescription
 
 // swiftlint:disable all
 let package = Package(
-    name: "SparkBadge",
+    name: "SparkComponentBadge",
     platforms: [
         .iOS(.v16)
     ],
     products: [
         .library(
-            name: "SparkBadge",
-            targets: ["SparkBadge"]
+            name: "SparkComponentBadge",
+            targets: ["SparkComponentBadge"]
         ),
         .library(
-            name: "SparkBadgeTesting",
-            targets: ["SparkBadgeTesting"]
+            name: "SparkComponentBadgeTesting",
+            targets: ["SparkComponentBadgeTesting"]
         ),
     ],
     dependencies: [
@@ -33,7 +33,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "SparkBadge",
+            name: "SparkComponentBadge",
             dependencies: [
                 .product(
                     name: "SparkCommon",
@@ -47,9 +47,9 @@ let package = Package(
             path: "Sources/Core"
         ),
         .target(
-            name: "SparkBadgeTesting",
+            name: "SparkComponentBadgeTesting",
             dependencies: [
-                "SparkBadge",
+                "SparkComponentBadge",
                 .product(
                     name: "SparkCommon",
                     package: "spark-ios-common"
@@ -70,10 +70,10 @@ let package = Package(
             path: "Sources/Testing"
         ),
         .testTarget(
-            name: "SparkBadgeUnitTests",
+            name: "SparkComponentBadgeUnitTests",
             dependencies: [
-                "SparkBadge",
-                "SparkBadgeTesting",
+                "SparkComponentBadge",
+                "SparkComponentBadgeTesting",
                 .product(
                     name: "SparkCommonTesting",
                     package: "spark-ios-common"
@@ -86,10 +86,10 @@ let package = Package(
             path: "Tests/UnitTests"
         ),
         .testTarget(
-            name: "SparkBadgeSnapshotTests",
+            name: "SparkComponentBadgeSnapshotTests",
             dependencies: [
-                "SparkBadge",
-                "SparkBadgeTesting",
+                "SparkComponentBadge",
+                "SparkComponentBadgeTesting",
                 .product(
                     name: "SparkCommonSnapshotTesting",
                     package: "spark-ios-common"

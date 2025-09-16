@@ -18,7 +18,7 @@ You are a developer ? A technical documentation in _DocC_ is available [here](ht
 
 ### Swift Package Manager
 
-_Note: Instructions below are for using **SPM** without the Xcode UI. It's the easiest to go to your Project Settings -> Swift Packages and add SparkBadge from there._
+_Note: Instructions below are for using **SPM** without the Xcode UI. It's the easiest to go to your Project Settings -> Swift Packages and add SparkComponentBadge from there._
 
 To integrate using Apple's Swift package manager, without Xcode integration, add the following as a dependency to your `Package.swift`:
 
@@ -26,7 +26,7 @@ To integrate using Apple's Swift package manager, without Xcode integration, add
 .package(url: "https://github.com/leboncoin/spark-ios-component-badge.git", .upToNextMajor(from: "1.0.0"))
 ```
 
-and then specify `SparkBadge` as a dependency of the Target in which you wish to use the SparkBadge.
+and then specify `SparkComponentBadge` as a dependency of the Target in which you wish to use the SparkComponentBadge.
 
 Here's an example `Package.swift`:
 
@@ -55,7 +55,7 @@ let package = Package(
             name: "MyPackage",
             dependencies: [
                 .product(
-                    name: "SparkBadge",
+                    name: "SparkComponentBadge",
                     package: "spark-ios-component-badge"
                 ),
             ]

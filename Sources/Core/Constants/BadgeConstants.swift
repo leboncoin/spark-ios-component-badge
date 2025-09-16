@@ -1,6 +1,6 @@
 //
 //  BadgeConstants.swift
-//  SparkBadge
+//  SparkComponentBadge
 //
 //  Created by alex.vecherov on 22.05.23.
 //  Copyright © 2023 Leboncoin. All rights reserved.

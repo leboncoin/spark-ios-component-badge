@@ -8,7 +8,7 @@
 
 import XCTest
 import SwiftUI
-@testable import SparkBadge
+@testable import SparkComponentBadge
 @_spi(SI_SPI) import SparkThemingTesting
 import SparkTheming
 
