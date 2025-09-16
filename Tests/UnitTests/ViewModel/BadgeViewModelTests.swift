@@ -1,13 +1,13 @@
 //
 //  BadgeViewModelTests.swift
-//  SparkBadge
+//  SparkComponentBadge
 //
 //  Created by alex.vecherov on 17.05.23.
 //  Copyright © 2023 Leboncoin. All rights reserved.
 //
 
 import Combine
-@testable import SparkBadge
+@testable import SparkComponentBadge
 import SparkTheming
 @_spi(SI_SPI) import SparkThemingTesting
 import SwiftUI
@@ -210,7 +210,7 @@ final class BadgeViewModelTests: XCTestCase {
 
 // MARK: - Private extensions
 private extension BadgeBorder {
-    func isEqual(to theme: Theme, isOutlined: Bool) -> Bool {
+    func isEqual(to theme: any Theme, isOutlined: Bool) -> Bool {
         return (isOutlined ? width == theme.border.width.medium : width == theme.border.width.none) &&
         radius == theme.border.radius.full &&
         color.color == theme.colors.base.surface.color

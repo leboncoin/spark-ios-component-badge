@@ -1,6 +1,6 @@
 //
 //  BadgeSizeDependentAttributes.swift
-//  SparkBadge
+//  SparkComponentBadge
 //
 //  Created by michael.zimmermann on 03.08.23.
 //  Copyright © 2023 Leboncoin. All rights reserved.
@@ -13,7 +13,7 @@ struct BadgeSizeDependentAttributes: Equatable {
 
     let offset: EdgeInsets
     let height: CGFloat
-    let font: TypographyFontToken
+    let font: any TypographyFontToken
 
     static func == (lhs: BadgeSizeDependentAttributes, rhs: BadgeSizeDependentAttributes) -> Bool {
         return lhs.offset == rhs.offset &&

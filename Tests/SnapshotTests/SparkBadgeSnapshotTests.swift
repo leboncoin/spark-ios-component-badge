@@ -1,5 +1,5 @@
 //
-//  SparkBadgeSnapshotTests.swift
+//  SparkComponentBadgeSnapshotTests.swift
 //  Spark
 //
 //  Created by alex.vecherov on 04.05.23.

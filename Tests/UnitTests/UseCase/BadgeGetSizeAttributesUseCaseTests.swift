@@ -1,12 +1,12 @@
 //
 //  BadgeGetSizeAttributesUseCase.swift
-//  SparkBadgeTests
+//  SparkComponentBadgeTests
 //
 //  Created by michael.zimmermann on 03.08.23.
 //  Copyright © 2023 Leboncoin. All rights reserved.
 //
 
-@testable import SparkBadge
+@testable import SparkComponentBadge
 @_spi(SI_SPI) import SparkThemingTesting
 @_spi(SI_SPI) import SparkCommon
 import XCTest
