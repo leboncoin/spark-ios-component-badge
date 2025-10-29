@@ -24,8 +24,6 @@ final internal class BadgeViewModel: ObservableObject {
 
     // MARK: - Properties
 
-    private var alreadyUpdateAll = false
-
     var theme: (any Theme)? {
         didSet {
             guard !oldValue.equals(self.theme), self.alreadyUpdateAll else { return }
@@ -78,6 +76,10 @@ final internal class BadgeViewModel: ObservableObject {
             self.setSizes()
         }
     }
+
+    // MARK: - Private Properties
+
+    private var alreadyUpdateAll = false
 
     // MARK: - Use Case Properties
 
