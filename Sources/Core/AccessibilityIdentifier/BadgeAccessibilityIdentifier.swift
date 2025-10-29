@@ -1,6 +1,6 @@
 //
 //  BadgeAccessibilityIdentifier.swift
-//  Spark
+//  SparkComponentBadge
 //
 //  Created by alex.vecherov on 05.05.23.
 //  Copyright © 2023 Leboncoin. All rights reserved.
@@ -12,5 +12,8 @@ public enum BadgeAccessibilityIdentifier {
 
     // MARK: - Properties
 
+    /// The accessibility identifier.
+    public static let view = "spark-badge"
+    /// The text label accessibility identifier.
     public static let text = "spark-badge-text"
 }

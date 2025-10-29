@@ -7,6 +7,6 @@ DerivedData/
 .swiftpm/
 *Generated/
 Package.resolved
-.swiftlint
+.swiftlint/
 .swiftlint/RemoteConfigCache
 .home
