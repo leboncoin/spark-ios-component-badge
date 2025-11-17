@@ -1,218 +1,579 @@
 //
 //  BadgeViewModelTests.swift
-//  SparkComponentBadge
+//  SparkComponentBadgeTests
 //
-//  Created by alex.vecherov on 17.05.23.
-//  Copyright © 2023 Leboncoin. All rights reserved.
+//  Created by robin.lemaire on 05/11/2025.
+//  Copyright © 2025 Leboncoin. All rights reserved.
 //
 
-import Combine
+import XCTest
 @testable import SparkComponentBadge
-import SparkTheming
+@_spi(SI_SPI) @testable import SparkComponentBadgeTesting
+@_spi(SI_SPI) import SparkCommon
+@_spi(SI_SPI) import SparkTheming
 @_spi(SI_SPI) import SparkThemingTesting
 import SwiftUI
-import XCTest
 
 final class BadgeViewModelTests: XCTestCase {
 
-    var theme: ThemeGeneratedMock = ThemeGeneratedMock.mocked()
-    var subscriptions = Set<AnyCancellable>()
+    // MARK: - Initialization Test
 
-    // MARK: - Tests
-    func test_init() throws {
-        for badgeIntent in BadgeIntentType.allCases {
-            // Given
+    func test_initialization_shouldUseDefaultValues() {
+        // GIVEN / WHEN
+        let stub = Stub()
 
-            let viewModel = BadgeViewModel(theme: theme, intent: badgeIntent)
+        // THEN
+        XCTAssertEqualToExpected(
+            on: stub,
+            otherColors: BadgeColors(),
+            otherSizes: BadgeSizes(),
+            otherCornerRadius: 0,
+            otherTextFont: TypographyFontTokenClear(),
+            otherIsNoText: true
+        )
 
-            let badgeExpectedColors = BadgeGetIntentColorsUseCase().execute(intentType: badgeIntent, on: theme.colors)
-
-            // Then
-
-            XCTAssertIdentical(viewModel.textColor as? ColorTokenGeneratedMock, badgeExpectedColors.foregroundColor as? ColorTokenGeneratedMock, "Text color doesn't match expected foreground")
-
-            XCTAssertIdentical(viewModel.theme as? ThemeGeneratedMock, theme, "Badge theme doesn't match expected theme")
-
-            XCTAssertTrue(viewModel.border.isEqual(to: theme, isOutlined: true), "Border border doesn't match expected")
-        }
+        XCTAssertNotCalled(
+            on: stub,
+            getColorsUseCase: true,
+            getCornerRadiusUseCase: true,
+            getSizesUseCase: true,
+            getTextFontUseCase: true,
+            getTextUseCase: true
+        )
     }
 
-    func test_set_value() throws {
-        for badgeIntent in BadgeIntentType.allCases {
-            // Given
+    // MARK: - Setup Tests
 
-            let expectedInitText = "20"
-            let expectedUpdatedText = "233"
-            let viewModel = BadgeViewModel(theme: theme, intent: badgeIntent, value: 20)
+    func test_setup_shouldCallAllUseCases() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-            // Then
+        // WHEN
+        viewModel.setup(stub: stub)
 
-            XCTAssertEqual(expectedInitText, viewModel.text, "Text doesn't match init value with standart format")
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
 
-            viewModel.value = 233
+        // UseCase Calls Count
+        BadgeGetColorsUseCaseableMockTest.XCTAssert(
+            stub.getColorsUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenIntent: stub.givenIntent,
+            expectedReturnValue: stub.expectedColors
+        )
 
-            XCTAssertEqual(expectedUpdatedText, viewModel.text, "Text doesn't match incremented value with standart format")
+        BadgeGetCornerRadiusUseCaseableMockTest.XCTAssert(
+            stub.getCornerRadiusUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            expectedReturnValue: stub.expectedCornerRadius
+        )
 
-            XCTAssertEqual(viewModel.textFont.font, theme.typography.captionHighlight.font, "Font is wrong")
+        BadgeGetSizesUseCaseableMockTest.XCTAssert(
+            stub.getSizesUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenSize: stub.givenSize,
+            givenIsBorder: stub.givenIsBorder,
+            givenValue: stub.givenValue,
+            expectedReturnValue: stub.expectedSizes
+        )
 
-            viewModel.size = .small
+        BadgeGetTextFontUseCaseableMockTest.XCTAssert(
+            stub.getTextFontUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenSize: stub.givenSize,
+            expectedReturnValue: stub.expectedTextFont
+        )
 
-            XCTAssertEqual(viewModel.textFont.font, theme.typography.smallHighlight.font, "Font is wrong")
-        }
+        BadgeGetTextUseCaseableMockTest.XCTAssert(
+            stub.getTextUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenValue: stub.givenValue,
+            givenUnit: stub.givenUnit,
+            expectedReturnValue: stub.expectedText
+        )
     }
 
-    func test_update_size() throws {
-        for badgeIntent in BadgeIntentType.allCases {
-            // Given
+    // MARK: - Property Change Tests
 
-            let viewModel = BadgeViewModel(theme: theme, intent: badgeIntent, value: 20)
+    func test_themeChanged_shouldUpdateManyProperties() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-            // Then
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
 
-            XCTAssertEqual(viewModel.size, .medium, "Badge should be .normal sized by default")
+        let givenTheme = ThemeGeneratedMock.mocked()
 
-            XCTAssertEqual(viewModel.textFont.font, theme.typography.captionHighlight.font, "Font is wrong")
+        // WHEN
+        viewModel.theme = givenTheme
 
-            viewModel.size = .small
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
 
-            XCTAssertEqual(viewModel.textFont.font, theme.typography.smallHighlight.font, "Font is wrong")
-        }
+        // UseCase Calls Count
+        BadgeGetColorsUseCaseableMockTest.XCTAssert(
+            stub.getColorsUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: givenTheme,
+            givenIntent: stub.givenIntent,
+            expectedReturnValue: stub.expectedColors
+        )
+
+        BadgeGetCornerRadiusUseCaseableMockTest.XCTAssert(
+            stub.getCornerRadiusUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: givenTheme,
+            expectedReturnValue: stub.expectedCornerRadius
+        )
+
+        BadgeGetSizesUseCaseableMockTest.XCTAssert(
+            stub.getSizesUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: givenTheme,
+            givenSize: stub.givenSize,
+            givenIsBorder: stub.givenIsBorder,
+            givenValue: stub.givenValue,
+            expectedReturnValue: stub.expectedSizes
+        )
+
+        BadgeGetTextFontUseCaseableMockTest.XCTAssert(
+            stub.getTextFontUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: givenTheme,
+            givenSize: stub.givenSize,
+            expectedReturnValue: stub.expectedTextFont
+        )
+
+        XCTAssertNotCalled(
+            on: stub,
+            getTextUseCase: true
+        )
     }
 
-    func test_update_intent() throws {
-        for badgeIntent in BadgeIntentType.allCases {
-            // Given
+    func test_intentChanged_shouldUpdateColors() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-            let viewModel = BadgeViewModel(theme: theme, intent: badgeIntent, value: 20)
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
 
-            // Then
+        let givenIntent = BadgeIntent.danger
 
-            XCTAssertEqual(viewModel.intent, badgeIntent, "Intent type was set wrong")
+        // WHEN
+        viewModel.intent = givenIntent
 
-            viewModel.intent = randomizeIntentAndExceptingCurrent(badgeIntent)
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
 
-            XCTAssertNotEqual(viewModel.intent, badgeIntent, "Intent type was set wrong")
-        }
+        BadgeGetColorsUseCaseableMockTest.XCTAssert(
+            stub.getColorsUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenIntent: givenIntent,
+            expectedReturnValue: stub.expectedColors
+        )
+
+        XCTAssertNotCalled(
+            on: stub,
+            getCornerRadiusUseCase: true,
+            getSizesUseCase: true,
+            getTextFontUseCase: true,
+            getTextUseCase: true
+        )
     }
 
-    func test_theme_change_publishes_values() {
-        // Given
-        let sut = BadgeViewModel(theme: self.theme, intent: .danger)
-        let updateExpectation = expectation(description: "Attributes updated")
-        updateExpectation.expectedFulfillmentCount = 2
+    func test_isBorderChanged_shouldUpdateColors() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-        let publishers = Publishers.Zip4(sut.$offset,
-                                         sut.$textColor,
-                                         sut.$backgroundColor,
-                                         sut.$border)
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
 
-        let allPublishers = Publishers.Zip(publishers, sut.$textFont)
+        let givenIsBorder = !stub.givenIsBorder
 
-        allPublishers.sink { _ in
-            updateExpectation.fulfill()
-        }
-        .store(in: &self.subscriptions)
+        // WHEN
+        viewModel.isBorder = givenIsBorder
 
-        // When
-        sut.theme = ThemeGeneratedMock.mocked()
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
 
-        // Then
-        wait(for: [updateExpectation], timeout: 0.1)
+        // UseCase Calls Count
+        BadgeGetSizesUseCaseableMockTest.XCTAssert(
+            stub.getSizesUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenSize: stub.givenSize,
+            givenIsBorder: givenIsBorder,
+            givenValue: stub.givenValue,
+            expectedReturnValue: stub.expectedSizes
+        )
+
+        // UseCase Calls Count
+        XCTAssertNotCalled(
+            on: stub,
+            getColorsUseCase: true,
+            getCornerRadiusUseCase: true,
+            getTextFontUseCase: true,
+            getTextUseCase: true
+        )
     }
 
-    func test_size_change_publishes_values() {
-        // Given
-        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .medium)
-        let updateExpectation = expectation(description: "Attributes updated")
-        updateExpectation.expectedFulfillmentCount = 2
+    func test_sizeChanged_shouldUpdateSizesAndTextFont() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-        let publishers = Publishers.Zip3(sut.$textFont,
-                                         sut.$badgeHeight,
-                                         sut.$offset)
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
 
-        publishers.sink { _ in
-            updateExpectation.fulfill()
-        }
-        .store(in: &self.subscriptions)
+        let givenSize = BadgeSize.medium
 
-        // When
-        sut.size = .small
+        // WHEN
+        viewModel.size = givenSize
 
-        // Then
-        wait(for: [updateExpectation], timeout: 0.1)
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
+
+        // UseCase Calls Count
+        BadgeGetSizesUseCaseableMockTest.XCTAssert(
+            stub.getSizesUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenSize: givenSize,
+            givenIsBorder: stub.givenIsBorder,
+            givenValue: stub.givenValue,
+            expectedReturnValue: stub.expectedSizes
+        )
+
+        BadgeGetTextFontUseCaseableMockTest.XCTAssert(
+            stub.getTextFontUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenSize: givenSize,
+            expectedReturnValue: stub.expectedTextFont
+        )
+
+        XCTAssertNotCalled(
+            on: stub,
+            getColorsUseCase: true,
+            getCornerRadiusUseCase: true,
+            getTextUseCase: true
+        )
     }
 
-    func test_intent_change_publishes_values() {
-        // Given
-        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .medium)
-        let updateExpectation = expectation(description: "Attributes updated")
-        updateExpectation.expectedFulfillmentCount = 2
+    func test_unitChanged_shouldUpdateText() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-        let publishers = Publishers.Zip(sut.$textColor,
-                                        sut.$backgroundColor)
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
 
-        publishers.sink { _ in
-            updateExpectation.fulfill()
-        }
-        .store(in: &self.subscriptions)
+        let givenUnit = "%"
 
-        // When
-        sut.intent = .alert
+        // WHEN
+        viewModel.unit = givenUnit
 
-        // Then
-        wait(for: [updateExpectation], timeout: 0.1)
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
+
+        // UseCase Calls Count
+        BadgeGetTextUseCaseableMockTest.XCTAssert(
+            stub.getTextUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenValue: stub.givenValue,
+            givenUnit: givenUnit,
+            expectedReturnValue: stub.expectedText
+        )
+
+        XCTAssertNotCalled(
+            on: stub,
+            getColorsUseCase: true,
+            getCornerRadiusUseCase: true,
+            getSizesUseCase: true,
+            getTextFontUseCase: true
+        )
     }
 
-    func test_value_change_publishes_values() {
-        // Given
-        let sut = BadgeViewModel(theme: self.theme, intent: .danger, size: .medium, value: 9)
-        let updateExpectation = expectation(description: "Attributes updated")
-        updateExpectation.expectedFulfillmentCount = 2
+    func test_valueChanged_shouldUpdateText() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-        sut.$text.sink { _ in
-            updateExpectation.fulfill()
-        }
-        .store(in: &self.subscriptions)
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
 
-        // When
-        sut.value = 99
+        let givenValue = 999
 
-        // Then
-        wait(for: [updateExpectation], timeout: 0.1)
+        // WHEN
+        viewModel.value = givenValue
+
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
+
+        // UseCase Calls Count
+        BadgeGetSizesUseCaseableMockTest.XCTAssert(
+            stub.getSizesUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenSize: stub.givenSize,
+            givenIsBorder: stub.givenIsBorder,
+            givenValue: givenValue,
+            expectedReturnValue: stub.expectedSizes
+        )
+
+        BadgeGetTextUseCaseableMockTest.XCTAssert(
+            stub.getTextUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenValue: givenValue,
+            givenUnit: stub.givenUnit,
+            expectedReturnValue: stub.expectedText
+        )
+
+        XCTAssertNotCalled(
+            on: stub,
+            getColorsUseCase: true,
+            getCornerRadiusUseCase: true,
+            getTextFontUseCase: true
+        )
     }
 
-    func test_formater_change_publishes_values() {
-        // Given
-        let sut = BadgeViewModel(theme: self.theme, intent: .danger, value: 9999, format: .default)
-        let updateExpectation = expectation(description: "Attributes updated")
-        updateExpectation.expectedFulfillmentCount = 2
+    func test_propertiesChanged_withoutSetupBefore_shouldNotCallUseCases() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-        sut.$text.sink { _ in
-            updateExpectation.fulfill()
-        }
-        .store(in: &self.subscriptions)
+        // WHEN
+        viewModel.theme = ThemeGeneratedMock.mocked()
+        viewModel.intent = .danger
+        viewModel.size = .medium
+        viewModel.unit = "%"
+        viewModel.value = 10
 
-        // When
-        sut.format = .overflowCounter(maxValue: 99)
+        // THEN
+        XCTAssertEqualToExpected(
+            on: stub,
+            otherColors: BadgeColors(),
+            otherSizes: BadgeSizes(),
+            otherCornerRadius: 0,
+            otherTextFont: TypographyFontTokenClear(),
+            otherIsNoText: true
+        )
 
-        // Then
-        wait(for: [updateExpectation], timeout: 0.1)
+        XCTAssertNotCalled(
+            on: stub,
+            getColorsUseCase: true,
+            getCornerRadiusUseCase: true,
+            getSizesUseCase: true,
+            getTextFontUseCase: true,
+            getTextUseCase: true
+        )
     }
 
-    // MARK: - Private functions
-    private func randomizeIntentAndExceptingCurrent(_ currentIntentType: BadgeIntentType) -> BadgeIntentType {
-        let filteredIntentTypes = BadgeIntentType.allCases.filter { $0 != currentIntentType }
-        let randomIndex = Int.random(in: 0...filteredIntentTypes.count - 1)
+    func test_propertiesChanged_withoutChange_shouldNotCallUseCases() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
-        return filteredIntentTypes[randomIndex]
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
+
+        // WHEN
+        viewModel.theme = stub.givenTheme
+        viewModel.intent = stub.givenIntent
+        viewModel.size = stub.givenSize
+        viewModel.unit = stub.givenUnit
+        viewModel.value = stub.givenValue
+
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
+
+        XCTAssertNotCalled(
+            on: stub,
+            getColorsUseCase: true,
+            getCornerRadiusUseCase: true,
+            getSizesUseCase: true,
+            getTextFontUseCase: true,
+            getTextUseCase: true
+        )
     }
 }
 
-// MARK: - Private extensions
-private extension BadgeBorder {
-    func isEqual(to theme: any Theme, isOutlined: Bool) -> Bool {
-        return (isOutlined ? width == theme.border.width.medium : width == theme.border.width.none) &&
-        radius == theme.border.radius.full &&
-        color.color == theme.colors.base.surface.color
+// MARK: - Stub
+
+private final class Stub {
+
+    // MARK: - Given Properties
+
+    let givenTheme = ThemeGeneratedMock.mocked()
+    let givenIntent = BadgeIntent.success
+    let givenIsBorder = false
+    let givenSize = BadgeSize.small
+    var givenValue: Int? = 24
+    var givenUnit: String? = "k"
+
+    // MARK: - Expected Properties
+
+    let expectedColors = BadgeColors(
+        background: ColorTokenGeneratedMock.blue(),
+        border: ColorTokenGeneratedMock.green(),
+        foreground: ColorTokenGeneratedMock.orange()
+    )
+    let expectedSizes = BadgeSizes(content: 4, border: 5, horizontalSpacing: 6)
+    let expectedCornerRadius: CGFloat = 10.0
+    let expectedTextFont = TypographyFontTokenGeneratedMock.mocked(.title2)
+    let expectedText = "24k"
+
+    // MARK: - Use Case Mocks
+
+    let getColorsUseCaseMock: BadgeGetColorsUseCaseableGeneratedMock
+    let getCornerRadiusUseCaseMock: BadgeGetCornerRadiusUseCaseableGeneratedMock
+    let getSizesUseCaseMock: BadgeGetSizesUseCaseableGeneratedMock
+    let getTextFontUseCaseMock: BadgeGetTextFontUseCaseableGeneratedMock
+    let getTextUseCaseMock: BadgeGetTextUseCaseableGeneratedMock
+
+    // MARK: - View Model
+
+    let viewModel: BadgeViewModel
+
+    // MARK: - Initialization
+
+    init() {
+        let getColorsUseCaseMock = BadgeGetColorsUseCaseableGeneratedMock()
+        getColorsUseCaseMock.executeWithThemeAndIntentReturnValue = self.expectedColors
+
+        let getCornerRadiusUseCaseMock = BadgeGetCornerRadiusUseCaseableGeneratedMock()
+        getCornerRadiusUseCaseMock.executeWithThemeReturnValue = self.expectedCornerRadius
+
+        let getSizesUseCaseMock = BadgeGetSizesUseCaseableGeneratedMock()
+        getSizesUseCaseMock.executeWithThemeAndSizeAndIsBorderAndValueReturnValue = self.expectedSizes
+
+        let getTextFontUseCaseMock = BadgeGetTextFontUseCaseableGeneratedMock()
+        getTextFontUseCaseMock.executeWithThemeAndSizeReturnValue = self.expectedTextFont
+
+        let getTextUseCaseMock = BadgeGetTextUseCaseableGeneratedMock()
+        getTextUseCaseMock.executeWithValueAndUnitReturnValue = self.expectedText
+
+        self.viewModel = BadgeViewModel(
+            getColorsUseCase: getColorsUseCaseMock,
+            getCornerRadiusUseCase: getCornerRadiusUseCaseMock,
+            getSizesUseCase: getSizesUseCaseMock,
+            getTextFontUseCase: getTextFontUseCaseMock,
+            getTextUseCase: getTextUseCaseMock
+        )
+
+        self.getColorsUseCaseMock = getColorsUseCaseMock
+        self.getCornerRadiusUseCaseMock = getCornerRadiusUseCaseMock
+        self.getSizesUseCaseMock = getSizesUseCaseMock
+        self.getTextFontUseCaseMock = getTextFontUseCaseMock
+        self.getTextUseCaseMock = getTextUseCaseMock
+    }
+
+    // MARK: - Helpers
+
+    func resetMockedData() {
+        self.getColorsUseCaseMock.reset()
+        self.getCornerRadiusUseCaseMock.reset()
+        self.getSizesUseCaseMock.reset()
+        self.getTextFontUseCaseMock.reset()
+        self.getTextUseCaseMock.reset()
     }
 }
+
+// MARK: - Extension
+
+private extension BadgeViewModel {
+
+    func setup(stub: Stub) {
+        self.setup(
+            theme: stub.givenTheme,
+            intent: stub.givenIntent,
+            isBorder: stub.givenIsBorder,
+            size: stub.givenSize,
+            value: stub.givenValue,
+            unit: stub.givenUnit
+        )
+    }
+}
+
+// MARK: - XCT Helpers
+
+private func XCTAssertNotCalled(
+    on stub: Stub,
+    getColorsUseCase getColorsUseCaseNotCalled: Bool = false,
+    getCornerRadiusUseCase getCornerRadiusUseCaseNotCalled: Bool = false,
+    getLayoutUseCase getLayoutUseCaseNotCalled: Bool = false,
+    getSizesUseCase getSizesUseCaseNotCalled: Bool = false,
+    getTextFontUseCase getTextFontUseCaseNotCalled: Bool = false,
+    getTextUseCase getTextUseCaseNotCalled: Bool = false
+) {
+    BadgeGetColorsUseCaseableMockTest.XCTCalled(
+        stub.getColorsUseCaseMock,
+        executeWithThemeAndIntentCalled: !getColorsUseCaseNotCalled
+    )
+
+    BadgeGetCornerRadiusUseCaseableMockTest.XCTCalled(
+        stub.getCornerRadiusUseCaseMock,
+        executeWithThemeCalled: !getCornerRadiusUseCaseNotCalled
+    )
+
+    BadgeGetSizesUseCaseableMockTest.XCTCalled(
+        stub.getSizesUseCaseMock,
+        executeWithThemeAndSizeAndIsBorderAndValueCalled: !getSizesUseCaseNotCalled
+    )
+
+    BadgeGetTextFontUseCaseableMockTest.XCTCalled(
+        stub.getTextFontUseCaseMock,
+        executeWithThemeAndSizeCalled: !getTextFontUseCaseNotCalled
+    )
+
+    BadgeGetTextUseCaseableMockTest.XCTCalled(
+        stub.getTextUseCaseMock,
+        executeWithValueAndUnitCalled: !getTextUseCaseNotCalled
+    )
+}
+
+private func XCTAssertEqualToExpected(
+    on stub: Stub,
+    otherColors: BadgeColors? = nil,
+    otherSizes: BadgeSizes? = nil,
+    otherCornerRadius: CGFloat? = nil,
+    otherTextFont: (any TypographyFontToken)? = nil,
+    otherIsNoText: Bool? = nil
+) {
+    let viewModel = stub.viewModel
+
+    XCTAssertEqual(
+        viewModel.colors,
+        otherColors ?? stub.expectedColors,
+        "Wrong colors value"
+    )
+    XCTAssertEqual(
+        viewModel.sizes,
+        otherSizes ?? stub.expectedSizes,
+        "Wrong sizes value"
+    )
+    XCTAssertEqual(
+        viewModel.cornerRadius,
+        otherCornerRadius ?? stub.expectedCornerRadius,
+        "Wrong cornerRadius value"
+    )
+    XCTAssertTrue(
+        viewModel.textFont.equals(otherTextFont ?? stub.expectedTextFont),
+        "Wrong textFont value"
+    )
+    XCTAssertEqual(
+        viewModel.text,
+        otherIsNoText == true ? nil : stub.expectedText,
+        "Wrong text value"
+    )
+}
+
