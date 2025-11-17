@@ -1,6 +1,6 @@
 //
 //  BadgeIsBorderEnvironmentValues.swift
-//  SparkComponentSelectionControls
+//  SparkComponentBadge
 //
 //  Created by robin.lemaire on 23/09/2025.
 //  Copyright © 2025 Leboncoin. All rights reserved.

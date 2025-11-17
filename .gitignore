@@ -10,3 +10,6 @@ Package.resolved
 .swiftlint/
 .swiftlint/RemoteConfigCache
 .home
+
+# SwiftLint Remote Config Cache
+.swiftlint/RemoteConfigCache
