@@ -23,5 +23,5 @@ public enum BadgeIntent: CaseIterable {
     // MARK: - Properties
 
     /// The default case. Equals to **.danger**.
-    static var `default`: Self = .danger
+    public static let `default`: Self = .danger
 }
