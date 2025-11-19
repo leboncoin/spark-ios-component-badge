@@ -16,5 +16,5 @@ public enum BadgeSize: CaseIterable {
     // MARK: - Properties
 
     /// The default case. Equals to **.medium**.
-    static var `default`: Self = .medium
+    public static let `default`: Self = .medium
 }
