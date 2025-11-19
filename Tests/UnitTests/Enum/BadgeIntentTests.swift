@@ -13,7 +13,7 @@ final class BadgeIntentTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_default_intent_is_basic() {
-        XCTAssertEqual(BadgeIntent.default, .basic)
+    func test_default_intent_is_danger() {
+        XCTAssertEqual(BadgeIntent.default, .danger)
     }
 }
