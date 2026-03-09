@@ -13,3 +13,6 @@ Package.resolved
 
 # SwiftLint Remote Config Cache
 .swiftlint/RemoteConfigCache
+.spmComponentDerivedData/
+
+.sparkans/

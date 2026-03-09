@@ -95,6 +95,7 @@ public final class SparkUIBadge: UIView {
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = BadgeAccessibilityIdentifier.text
         label.isHidden = true
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
     }()
 

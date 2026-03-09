@@ -50,4 +50,4 @@ Attached (trailing and top right corner):
 ## Resources
 
 - Specification on [ZeroHeight](https://zeroheight.com/1186e1705/p/8711ec-badge)
-- Desing on [Figma](https://www.figma.com/design/0QchRdipAVuvVoDfTjLrgQ/Spark-Component-Specs?node-id=643-15510)
+- Design on [Figma](https://www.figma.com/design/0QchRdipAVuvVoDfTjLrgQ/Spark-Component-Specs?node-id=643-15510)
