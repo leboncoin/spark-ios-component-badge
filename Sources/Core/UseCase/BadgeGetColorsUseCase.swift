@@ -30,12 +30,6 @@ final class BadgeGetColorsUseCase: BadgeGetColorsUseCaseable {
                     border: borderColor,
                     foreground: colors.accent.onAccent
                 )
-        case .basic:
-                .init(
-                    background: colors.basic.basic,
-                    border: borderColor,
-                    foreground: colors.basic.onBasic
-                )
         case .alert:
                 .init(
                     background: colors.feedback.alert,

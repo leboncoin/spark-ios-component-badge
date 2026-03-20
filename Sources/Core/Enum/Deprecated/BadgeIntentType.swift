@@ -13,7 +13,6 @@ import Foundation
 @available(*, deprecated, message: "Not used anymore by the new SparkBadge or SparkUIBadge")
 public enum BadgeIntentType: CaseIterable {
     case accent
-    case basic
     case alert
     case danger
     case info

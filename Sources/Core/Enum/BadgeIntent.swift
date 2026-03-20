@@ -11,7 +11,6 @@ import Foundation
 /// The various intent color a badge may have.
 public enum BadgeIntent: CaseIterable {
     case accent
-    case basic
     case alert
     case danger
     case info
