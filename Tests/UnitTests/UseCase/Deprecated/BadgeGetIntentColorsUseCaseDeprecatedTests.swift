@@ -30,12 +30,6 @@ final class BadgeGetIntentColorsUseCaseDeprecatedTests: XCTestCase {
                 expectedTextToken: mockedExpectedColors.accent.onAccent
             ),
             .init(
-                givenIntent: .basic,
-                expectedBackgroundToken: mockedExpectedColors.basic.basic,
-                expectedBorderToken: mockedExpectedSurfaceColor,
-                expectedTextToken: mockedExpectedColors.basic.onBasic
-            ),
-            .init(
                 givenIntent: .alert,
                 expectedBackgroundToken: mockedExpectedColors.feedback.alert,
                 expectedBorderToken: mockedExpectedSurfaceColor,

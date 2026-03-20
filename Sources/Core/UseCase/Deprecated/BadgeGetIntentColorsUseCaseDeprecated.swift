@@ -31,12 +31,6 @@ final class BadgeGetIntentColorsUseCaseDeprecated: BadgeGetIntentColorsUseCaseDe
                 borderColor: surfaceColor,
                 foregroundColor: colors.accent.onAccent
             )
-        case .basic:
-            return BadgeColorsDeprecated(
-                backgroundColor: colors.basic.basic,
-                borderColor: surfaceColor,
-                foregroundColor: colors.basic.onBasic
-            )
         case .alert:
             return BadgeColorsDeprecated(
                 backgroundColor: colors.feedback.alert,
