@@ -23,7 +23,7 @@ import SparkTheming
 /// )
 /// badge.value = 49
 /// badge.unit = "k"
-/// badge.intent = .basic
+/// badge.intent = .danger
 /// badge.size = .medium
 /// badge.isBorder = false 
 /// ```
@@ -44,7 +44,7 @@ import SparkTheming
 /// )
 /// badge.value = 49
 /// badge.unit = "k"
-/// badge.intent = .basic
+/// badge.intent = .danger
 /// badge.size = .medium
 /// badge.isBorder = false
 ///
@@ -198,7 +198,7 @@ public final class SparkUIBadge: UIView {
     /// )
     /// badge.value = 49
     /// badge.unit = "k"
-    /// badge.intent = .basic
+    /// badge.intent = .danger
     /// badge.size = .medium
     /// badge.isBorder = false
     /// ```

@@ -44,20 +44,6 @@ final class BadgeGetColorsUseCaseTests: XCTestCase {
         XCTAssertEqual(result, expectedColors)
     }
 
-    func test_execute_with_basic_intent() {
-        // GIVEN / WHEN
-        let result = self.sut.execute(theme: self.theme, intent: .basic)
-
-        let expectedColors = BadgeColors(
-            background: self.theme.colors.basic.basic,
-            border: self.theme.colors.base.surface,
-            foreground: self.theme.colors.basic.onBasic
-        )
-
-        // THEN
-        XCTAssertEqual(result, expectedColors)
-    }
-
     func test_execute_with_alert_intent() {
         // GIVEN / WHEN
         let result = self.sut.execute(theme: self.theme, intent: .alert)
